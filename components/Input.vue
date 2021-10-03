@@ -19,6 +19,7 @@ export default {
     background: rgba(60, 60, 67, 0.1);
     border-radius: 10px;
     padding: 14px 16px 14px 8px;
+    white-space: nowrap;
     & input{
       background-color: unset;
       outline: unset;
