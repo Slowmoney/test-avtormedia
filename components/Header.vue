@@ -1,17 +1,13 @@
 <template>
-  <div class="t-header">
+  <header class="t-header">
     <div class="t-header__wrap">
       <div class="t-header-logo">Logo</div>
       <div class="t-header-spacer"></div>
       <div class="t-header-title">Посты</div>
       <Input class="t-header-search" placeholder="Поиск" />
-
-      <div class="t-header-btn btn btn_posts">
-        <IconGridRow class="btn-icon" />
-        <span>Посты</span>
-      </div>
+      <BtnLink  class="t-header-btn btn_posts" @click="$router.push('/')"><IconGridRow/><span style="margin-left: 7px;">Посты</span></BtnLink>
     </div>
-  </div>
+  </header>
 </template>
 
 <style lang="scss">
@@ -21,7 +17,7 @@
   }
 }
 @media (max-width: 690px) {
-  .btn.btn_posts {
+  .btn-link.btn_posts {
     display: none;
   }
   .t-header {
@@ -55,18 +51,11 @@
       display: block;
     }
   }
-  &-btn.btn {
-      white-space: nowrap;
-      span {
-        vertical-align: 4px;
-      }
-    }
   &-spacer {
     flex: 1;
   }
 }
 .btn_posts {
-  color: #ff008a;
-  padding-left: 90px;
+  margin-left: 90px;
 }
 </style>
