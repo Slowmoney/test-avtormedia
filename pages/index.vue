@@ -1,6 +1,19 @@
 <template>
-  <div class="post-list">
-    <Card v-for="(e, i) in posts" :key="i" class="post"  :title="e.title" :desc="e.body"><NuxtLink :to="`/post/${e.id}`"><IconComment/></NuxtLink><span class="post-comment">{{e.comments.length}}</span><NuxtLink :to="`/post/${e.id}`"><IconPencilCreate/></NuxtLink></Card>
+  <div class="post-container">
+    <div class="post-list">
+      <Card v-for="(e, i) in posts" :key="i" class="post" :title="e.title" :desc="e.body">
+        <template v-if="e.comments">
+          <NuxtLink :to="`/post/${e.id}`">
+            <IconComment />
+          </NuxtLink>
+          <span class="post-comment">{{ e.comments.length }}</span>
+        </template>
+        <NuxtLink :to="`/post/${e.id}`">
+          <IconPencilCreate />
+        </NuxtLink>
+      </Card>
+    </div>
+    <Pagination />
   </div>
 </template>
 
@@ -20,20 +33,32 @@ export default {
   },
   computed: {
     ...mapState(['posts'])
+  },
+  watch: {
+    posts() {
+      window.scrollTo({ top: 0 })
+    }
   }
 }
 </script>
 <style lang="scss">
-
+@media (max-width: 1002px) {
+  .post-container {
+    max-width: 668px !important;
+  }
+}
 .post {
-  &-list {
-    display: flex;
-    flex-wrap: wrap;
-    max-width: 1024px;
+  &-container {
+    max-width: 1002px;
     justify-content: center;
     margin: auto;
   }
-  &-comment{
+  &-list {
+    display: flex;
+    flex-wrap: wrap;
+    margin: auto;
+  }
+  &-comment {
     color: rgba(60, 60, 67, 0.6);
     font-size: 17px;
     margin-left: 12px;

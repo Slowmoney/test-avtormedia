@@ -139,6 +139,9 @@ export default {
       margin-left: 30px;
     }
   }
+  ::first-letter {
+      text-transform: capitalize;
+    }
 }
 .comment {
   display: flex;

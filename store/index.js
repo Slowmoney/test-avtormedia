@@ -1,7 +1,10 @@
 export const state = () => ({
   posts: [],
   openPost: null,
-  comments:[]
+  comments: [],
+  total: 0,
+  currentPage: 1,
+  searchString: ""
 })
 
 export const getters = {
@@ -17,25 +20,34 @@ export const mutations = {
     state.comments = payload
   },
   setPost(state, payload) {
-    console.log(state);
-
     const index = state.posts.findIndex(e => e.id === payload.id)
-    console.log(index);
     if (~index) {
       state.posts[index] = payload
     }
+  },
+  setTotal(state, payload) { state.total = payload },
+  setPage(state, payload) {
+    if (!payload) return
+    state.currentPage = payload
+  },
+  setSearchString(state, qstring) {
+    state.searchString = qstring
   }
 }
 export const actions = {
-  async getPostList({commit}) {
+  async getPostList({ commit, state }) {
     try {
-      const posts = await this.$axios.$get('https://jsonplaceholder.typicode.com/posts?_embed=comments')
-      commit('setPosts', posts)
+      const limit = 12
+      const params = { _page: state.currentPage, _limit: limit, _embed: "comments" }
+      if (state.searchString) params.q = state.searchString
+      const data = await this.$axios.get(`https://jsonplaceholder.typicode.com/posts?${new URLSearchParams(params).toString()}`)
+      commit('setTotal', Math.ceil(data.headers['x-total-count'] / limit))
+      commit('setPosts', data.data)
     } catch (error) {
 
     }
   },
-  async openPost({commit}, id) {
+  async openPost({ commit }, id) {
     try {
       const post = await this.$axios.$get(`https://jsonplaceholder.typicode.com/posts/${id}`)
       commit('setOpenPost', post)
@@ -46,13 +58,25 @@ export const actions = {
 
     }
   },
-  async saveOpenText({commit}, {id, body}){
+  async saveOpenText({ commit }, { id, body }) {
     try {
-      const post = await this.$axios.$patch(`https://jsonplaceholder.typicode.com/posts/${id}`, {body})
+      const post = await this.$axios.$patch(`https://jsonplaceholder.typicode.com/posts/${id}`, { body })
       commit('setPost', post)
       commit('setOpenPost', post)
     } catch (error) {
 
     }
+  },
+  async setPage({ commit, dispatch }, payload) {
+    try {
+      commit('setPage', payload)
+      await dispatch('getPostList')
+    } catch (error) {
+
+    }
+  },
+  async search({ commit, dispatch }) {
+    commit('setPage', 1)
+    await dispatch('getPostList')
   }
 }

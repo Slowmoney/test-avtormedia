@@ -4,12 +4,23 @@
       <div class="t-header-logo">Logo</div>
       <div class="t-header-spacer"></div>
       <div class="t-header-title">Посты</div>
-      <Input class="t-header-search" placeholder="Поиск" />
-      <BtnLink  class="t-header-btn btn_posts" @click="$router.push('/')"><IconGridRow/><span style="margin-left: 7px;">Посты</span></BtnLink>
+      <Input :value="$store.state.searchString" class="t-header-search" placeholder="Поиск" @input="setSearchString" @enter="search" />
+      <BtnLink class="t-header-btn btn_posts" @click="$router.push('/')">
+        <IconGridRow />
+        <span style="margin-left: 7px;">Посты</span>
+      </BtnLink>
     </div>
   </header>
 </template>
-
+<script>
+import { mapActions, mapMutations } from 'vuex';
+export default {
+  methods: {
+    ...mapActions(["search"]),
+    ...mapMutations(["setSearchString"])
+  }
+}
+</script>
 <style lang="scss">
 @media (min-width: 690px) {
   .t-header {

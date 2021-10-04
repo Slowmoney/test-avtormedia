@@ -7,6 +7,11 @@
     <Footer></Footer>
   </div>
 </template>
+<script>
+export default {
+  scrollToTop: true
+}
+</script>
 <style lang="scss">
 @import url("https://fonts.googleapis.com/css2?family=Inter&display=swap");
 * {
